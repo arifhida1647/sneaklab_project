@@ -89,17 +89,7 @@ class Orders extends BaseController
 
     public function index()
     {
-        $jumlahBaris = 5;
-        $katakunci = $this->request->getGet('katakunci');
-        if ($katakunci) {
-            $pencarian = $this->model->cari($katakunci);
-        } else {
-            $pencarian = $this->model;
-        }
-        $data['katakunci'] = $katakunci;
-        $data['dataOrders'] = $pencarian->orderBy('order_id', 'desc')->findAll();
-        $data['pager'] = $this->model->pager;
-        $data['nomor'] = ($this->request->getVar('page') == 1) ? '0' : $this->request->getVar('page');
+        $data['dataOrders'] = $this->model->orderBy('order_id', 'desc')->findAll();
         return view('orders_view', $data);
     }
     // Function to log actions

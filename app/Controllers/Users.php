@@ -26,10 +26,11 @@ class Users extends BaseController
 		$aturan = [
             'username' => [
                 'label' => 'Username',
-                'rules' => 'required|min_length[5]',
+                'rules' => 'required|min_length[5]||is_unique[users.username]',
                 'errors' => [
                     'required' => '{field} harus diisi',
-                    'min_length' => 'Minimum karakter untuk field {field} adalah 5 karakter'
+                    'min_length' => 'Minimum karakter untuk field {field} adalah 5 karakter',
+					'is_unique' => 'This username is already registered.'
                 ]
             ],
             'password' => [
@@ -50,10 +51,11 @@ class Users extends BaseController
             ],
             'email' => [
                 'label' => 'Email',
-                'rules' => 'required|valid_email',
+                'rules' => 'required|valid_email|is_unique[users.email]',
                 'errors' => [
                     'required' => '{field} harus diisi',
-                    'valid_email' => 'Email yang Anda masukkan tidak valid'
+                    'valid_email' => 'Email yang Anda masukkan tidak valid',
+					'is_unique' => 'This email is already registered.'
                 ]
             ],
             'phone_number' => [
@@ -112,17 +114,7 @@ class Users extends BaseController
 	}
 	public function index()
 	{
-		$jumlahBaris = 5;
-		$katakunci = $this->request->getGet('katakunci');
-		if ($katakunci) {
-			$pencarian = $this->model->cari($katakunci);
-		} else {
-			$pencarian = $this->model;
-		}
-		$data['katakunci'] = $katakunci;
-		$data['dataUsers'] = $pencarian->orderBy('user_id', 'desc')->findAll();
-		$data['pager'] = $this->model->pager;
-		$data['nomor'] = ($this->request->getVar('page') == 1) ? '0' : $this->request->getVar('page');
+		$data['dataUsers'] = $this->model->orderBy('user_id', 'desc')->findAll();
 		return view('users_view', $data);
 	}
 	 // Function to log actions

@@ -6,11 +6,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sneakslab | Data Users</title>
-       <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="<?php echo base_url('assets/plugins/fontawesome-free/css/all.min.css'); ?>">
-       <!-- Theme style -->
+    <!-- Theme style -->
     <link rel="stylesheet" href="<?php echo base_url('assets/dist/css/Adminlte.min.css'); ?>">
 </head>
 
@@ -101,7 +102,7 @@
                         <!-- Button trigger modal -->
                         <button type="button" class="btn btn-info btn-sm my-3 py-2" data-bs-toggle="modal"
                             data-bs-target="#exampleModal">
-                            + Tambah Data Pegawai
+                            + Tambah Data Users
                         </button>
                         <!-- /.card-header -->
                         <div class="card-body">
@@ -120,6 +121,7 @@
                                 </thead>
                                 <tbody>
                                     <?php
+                                    $nomor = 0;
                                     foreach ($dataUsers as $k => $v) {
                                         $nomor = $nomor + 1;
                                         ?>

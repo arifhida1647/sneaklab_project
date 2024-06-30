@@ -95,6 +95,7 @@
                                 </thead>
                                 <tbody>
                                     <?php
+                                     $nomor = 0;
                                     foreach ($dataAdmin as $k => $v) {
                                         $nomor = $nomor + 1;
                                         ?>

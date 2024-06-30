@@ -97,6 +97,7 @@
                             </thead>
                             <tbody>
                                 <?php
+                                $nomor = 0;
                                 foreach ($dataOrders as $k => $v) {
                                     ?>
                                     <tr>

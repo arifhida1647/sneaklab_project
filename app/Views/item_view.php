@@ -107,6 +107,7 @@
                                 </thead>
                                 <tbody>
                                     <?php
+                                    $nomor = 0;
                                     foreach ($dataItem as $k => $v) {
                                         ?>
                                         <tr>
