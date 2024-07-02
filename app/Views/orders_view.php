@@ -90,6 +90,7 @@
                                     <th>Item ID</th>
                                     <th>Order Date</th>
                                     <th>Status</th>
+                                    <th>Order Address</th>
                                     <th>Total Amount</th>
                                     <th>Payment Proof Path</th>
                                     <th>Aksi</th>
@@ -106,6 +107,7 @@
                                         <td><?= $v['item_id'] ?></td>
                                         <td><?= $v['order_date'] ?></td>
                                         <td><?= $v['status'] ?></td>
+                                        <td><?= $v['order_address'] ?></td>
                                         <td><?= $v['total_amount'] ?></td>
                                         <?php if (empty($v['payment_proof_path'])): ?>
                                             <td>Belum Upload</td>
