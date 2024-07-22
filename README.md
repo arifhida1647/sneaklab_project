@@ -31,7 +31,7 @@ Ikuti langkah-langkah berikut untuk menginstal proyek ini:
 
     ```env
     database.default.hostname = localhost
-    database.default.database = posci4
+    database.default.database = ci4
     database.default.username = root
     database.default.password = 
     database.default.DBDriver = MySQLi
