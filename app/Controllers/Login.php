@@ -38,7 +38,7 @@ class Login extends BaseController
                 // If no error, set session and redirect to home
                 if (empty($err)) {
                     $dataSesi = [
-                        'admin_id' => $dataUser['admin_id'],
+                        'admin_id' => $dataUser['id'],
                         'role' => $dataUser['role']
                     ];
                     session()->set($dataSesi);

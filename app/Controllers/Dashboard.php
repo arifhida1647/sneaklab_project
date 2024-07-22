@@ -2,50 +2,86 @@
 
 namespace App\Controllers;
 
-use App\Models\ModelOrders;
+use App\Models\ModelKeranjang;
+use App\Models\ModelPelanggan;
+use App\Models\ModelInvoice;
+use App\Models\ModelItem;
 
-use App\Models\ModelUsers;
 class Dashboard extends BaseController
 {
+    protected $model;
+    protected $modelKeranjang;
+    protected $modelPelanggan;
+    protected $modelInvoice;
+    public function __construct()
+    {
+        $this->model = new ModelInvoice();
+        $this->modelKeranjang = new ModelKeranjang();
+        $this->modelPelanggan = new ModelPelanggan();
+        $this->modelItem = new ModelItem();
+    }
+
     public function index(): string
     {
-        $model = new ModelOrders();
-        $modelUsers = new ModelUsers();
-
-        $totalUsers = $modelUsers->select('COUNT(user_id) as total_user')->first();
-
-        $topOrders = $model->select('order_date, SUM(total_amount) as total_amount,COUNT(order_id) as order_count,  COUNT(DISTINCT user_id) as user_count')
-            ->groupBy('order_date')
-            ->orderBy('order_date', 'DESC')
-            ->limit(5)
+        // Mengambil 10 data teratas yang telah di-group dan dijumlahkan
+        $data['dataInvoice'] = $this->model->select('tanggal, SUM(total_harga) as total_harga, SUM(tunai) as tunai, SUM(kembalian) as kembalian')
+            ->groupBy('tanggal')
+            ->orderBy('tanggal', 'desc')
+            ->where('status','sukses')
+            ->limit(7)
             ->findAll();
 
-        $sumAmount = $model->select('SUM(total_amount) as total_amount_sum')->first();
+        // Mengambil tanggal dan total_harga
+        $labelsSales = [];
+        $totalsSales = [];
 
+        $labelsTunai = [];
+        $totalsTunai = [];
 
-        $topOrdersWithItems = $model->select('orders.order_date, SUM(orders.total_amount) as total_amount, COUNT(orders.order_id) as order_count, COUNT(DISTINCT orders.user_id) as user_count, GROUP_CONCAT(laundry_items.item_name SEPARATOR ", ") as item_names')
-            ->join('laundry_items', 'laundry_items.item_id = orders.item_id')
-            ->groupBy('orders.order_date')
-            ->orderBy('orders.order_date', 'DESC')
-            ->limit(5)
-            ->findAll();
-
-        $orderCounts = $model->select('COUNT(order_id) as total_orders,
-            COUNT(CASE WHEN status = "pending" THEN 1 END) as pending_orders,
-            COUNT(CASE WHEN status = "in progress" THEN 1 END) as in_progress_orders')
+        foreach ($data['dataInvoice'] as $invoice) {
+            $labelsSales[] = $invoice['tanggal'];
+            $totalsSales[] = $invoice['total_harga'];
+        }
+        foreach ($data['dataInvoice'] as $invoice) {
+            $labelsTunai[] = $invoice['tanggal'];
+            $totalsTunai[] = $invoice['tunai'];
+        }
+        // Menghitung jumlah data dengan status 'pending'
+        $pendingCountQuery = $this->model->select('COUNT(*) as pendingCount')
+            ->where('status', 'pending')
             ->first();
+        $data['pendingCount'] = $pendingCountQuery['pendingCount'];
 
-        $data['orders'] = [
-            'topOrders' => $topOrders,
-            'sumAmount' => $sumAmount['total_amount_sum'],
-            'orderCounts' => $orderCounts,
-            'totalUsers' => $totalUsers['total_user'],
-        ];
-        $data['tableOrders'] = [
-            'topOrdersWithItems' => $topOrdersWithItems
-        ];
+        $sumPenjualanQuery = $this->model->select('SUM(total_harga) as sumPenjualan')
+            ->first();
+        $data['sumPenjualan'] = $sumPenjualanQuery['sumPenjualan'];
+
+        // Menghitung jumlah data dengan status 'sukses'
+        $suksesCountQuery = $this->model->select('COUNT(*) as suksesCount')
+            ->where('status', 'sukses')
+            ->first();
+        $data['suksesCount'] = $suksesCountQuery['suksesCount'];
+
+        // Menghitung total data
+        $totalCountQuery = $this->model->select('COUNT(*) as totalCount')
+            ->first();
+        $data['totalCount'] = $totalCountQuery['totalCount'];
+
+        $pelangganCountQuery = $this->modelPelanggan->select('COUNT(*) as totalPelanggan')
+            ->first();
+        $data['totalPelanggan'] = $pelangganCountQuery['totalPelanggan'];
+
+        $itemCountQuery = $this->modelItem->select('COUNT(*) as totalItem')
+            ->first();
+        $data['totalItem'] = $itemCountQuery['totalItem'];
 
 
+        // Menambahkan labels dan totals ke dalam data
+        $data['labelsSales'] = $labelsSales;
+        $data['totalsSales'] = $totalsSales;
+        // Menambahkan labels dan totals ke dalam data
+        $data['labelsTunai'] = $labelsTunai;
+        $data['totalsTunai'] = $totalsTunai;
         return view('dashboard_view', $data);
     }
 }

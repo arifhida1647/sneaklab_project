@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Sneakslab | Log in</title>
+    <title>Toko sembako Leon | Log in</title>
 
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"
@@ -20,7 +20,7 @@
 <body class="hold-transition login-page">
     <div class="login-box">
         <div class="login-logo">
-            <a href="<?php echo base_url('') ?>"><b>Sneakslab</b> | Dahboard</a>
+            <a href="<?php echo base_url('') ?>"><b>Toko sembako Leon </b>Dahboard</a>
         </div>
         <!-- /.login-logo -->
         <div class="card">

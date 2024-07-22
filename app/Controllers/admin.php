@@ -12,7 +12,7 @@ class admin extends BaseController
     }
     public function hapus($id)
     {
-        $this->logAction('delete', $id);
+        // $this->logAction('delete', $id);
         $this->model->delete($id);
         return redirect()->to('admin');
     }
@@ -52,13 +52,13 @@ class admin extends BaseController
         ];
         $validasi->setRules($aturan);
         if ($validasi->withRequest($this->request)->run()) {
-            $admin_id = $this->request->getPost('admin_id');
+            $id = $this->request->getPost('id');
             $username = $this->request->getPost('username');
             $password = $this->request->getPost('password');
             $role = $this->request->getPost('role');
 
             $data = [
-                'admin_id' => $admin_id,
+                'id' => $id,
                 'username' => $username,
                 'password' => $password,
                 'role' => $role,
@@ -66,10 +66,10 @@ class admin extends BaseController
 
             $this->model->save($data);
 
-            $actionMessage = ($admin_id) ? 'edit Admin with id ' . $admin_id : 'New Admin';
+            // $actionMessage = ($admin_id) ? 'edit Admin with id ' . $admin_id : 'New Admin';
 
             // Log the action
-            $this->logAction('save', $admin_id, $actionMessage);
+            // $this->logAction('save', $admin_id, $actionMessage);
 
             $hasil['sukses'] = "Berhasil memasukkan data";
             $hasil['error'] = true;
@@ -83,22 +83,22 @@ class admin extends BaseController
     }
     public function index()
     {
-        $data['dataAdmin'] = $this->model->orderBy('admin_id', 'desc')->findAll();
+        $data['dataAdmin'] = $this->model->orderBy('id', 'desc')->findAll();
         return view('admin_view', $data);
     }
     // Function to log actions
-    protected function logAction($action, $item_id, $actionMessage = null)
-    {
-        $admin_id = session()->get('admin_id'); // Assuming admin_id is stored in session
+    // protected function logAction($action, $item_id, $actionMessage = null)
+    // {
+    //     $id = session()->get('id'); // Assuming admin_id is stored in session
 
-        // Create log data
-        $logData = [
-            'admin_id' => $admin_id,
-            'action' => ucfirst($action) . ' ' . ($actionMessage ?: 'table Admin with id ' . $item_id),
-        ];
+    //     // Create log data
+    //     $logData = [
+    //         'id' => $id,
+    //         'action' => ucfirst($action) . ' ' . ($actionMessage ?: 'table Admin with id ' . $item_id),
+    //     ];
 
-        // Save log using ModelLog
-        $modelLog = new ModelLog();
-        $modelLog->save($logData);
-    }
+    //     // Save log using ModelLog
+    //     $modelLog = new ModelLog();
+    //     $modelLog->save($logData);
+    // }
 }
